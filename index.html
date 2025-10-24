@@ -1,0 +1,40 @@
+<form id="orderForm">
+  <!-- ชื่อลูกค้า -->
+  <label for="customerName">ชื่อลูกค้า:</label>
+  <input type="text" id="customerName" name="customerName" required>
+
+  <!-- ชื่อศิลปิน -->
+  <label for="artist">เลือกชื่อศิลปิน:</label>
+  <select id="artist" name="artist">
+    <!-- รายชื่อศิลปิน -->
+  </select>
+
+  <!-- รายการสินค้า -->
+  <label for="product">เลือกรายการสินค้า:</label>
+  <select id="product" name="product">
+    <!-- รายการสินค้าจะอัปเดตตามศิลปินที่เลือก -->
+  </select>
+
+  <!-- ราคา -->
+  <label for="price">ราคา:</label>
+  <input type="text" id="price" name="price" readonly>
+
+  <!-- ราคาหิ้ว -->
+  <label for="shipping">ราคาหิ้ว:</label>
+  <input type="text" id="shipping" name="shipping">
+
+  <!-- รวมราคา -->
+  <label for="total">รวมราคา:</label>
+  <input type="text" id="total" name="total" readonly>
+
+  <!-- ที่อยู่จัดส่ง -->
+  <label for="address">ที่อยู่จัดส่ง:</label>
+  <input type="text" id="address" name="address">
+
+  <!-- แนบสลิป -->
+  <label for="slip">แนบสลิป:</label>
+  <input type="file" id="slip" name="slip">
+
+  <!-- ปุ่มบันทึก -->
+  <button type="submit">บันทึกข้อมูล</button>
+</form>
