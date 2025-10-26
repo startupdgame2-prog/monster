@@ -3,62 +3,167 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>บันทึกข้อมูลลูกค้า</title>
+  <title>Sharkwowboy</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9; }
-    h2 { text-align: center; color: #333; }
-    .form-container { max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
-    label { display: block; margin-top: 10px; font-weight: bold; }
-    input, select, textarea { width: 100%; padding: 10px; margin: 8px 0; border-radius: 4px; border: 1px solid #ddd; }
-    button { padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; width: 100%; font-size: 16px; }
-    button:hover { background-color: #45a049; }
-    select { background-color: #fff; }
-    textarea { resize: vertical; height: 100px; }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #B3E5FC; /* สีฟ้าพาสเทล */
+      margin: 0;
+      padding: 0;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-top: 30px;
+    }
+
+    .form-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container img {
+      width: 150px; /* ขนาดโลโก้ */
+      height: auto;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .form-group label {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 48%; /* กำหนดความกว้างให้ช่องกรอกข้อมูลอยู่ใน 2 คอลัมน์ */
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      height: 100px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .file-upload {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .file-upload input {
+      width: 48%;
+    }
   </style>
 </head>
 <body>
 
-  <h2>บันทึกข้อมูลลูกค้า</h2>
+  <!-- โลโก้ด้านบน -->
+  <div style="text-align: center;">
+    <img src="/mnt/data/544833352_122174190182498520_8411966181056346662_n.jpg" alt="Logo" />
+    <h2>Sharkwowboy</h2>
+  </div>
 
   <div class="form-container">
     <form id="orderForm">
-      <label for="customerName">ชื่อลูกค้า:</label>
-      <input type="text" id="customerName" required>
+      <div class="form-group">
+        <div style="width: 48%;">
+          <label for="customerName">ชื่อลูกค้า:</label>
+          <input type="text" id="customerName" required>
+        </div>
 
-      <label for="artistName">ชื่อศิลปิน:</label>
-      <select id="artistName" required>
-        <option value="">เลือกศิลปิน</option>
-        <!-- รายชื่อศิลปินจะถูกเพิ่มที่นี่ -->
-      </select>
+        <div style="width: 48%;">
+          <label for="artistName">ชื่อศิลปิน:</label>
+          <select id="artistName" required>
+            <option value="">เลือกศิลปิน</option>
+            <!-- รายชื่อศิลปินจะถูกเพิ่มที่นี่ -->
+          </select>
+        </div>
+      </div>
 
-      <label for="productName">ชื่อสินค้า:</label>
-      <select id="productName" required>
-        <option value="">เลือกสินค้า</option>
-        <!-- รายชื่อสินค้าและราคา จะถูกเพิ่มที่นี่ -->
-      </select>
+      <div class="form-group">
+        <div style="width: 48%;">
+          <label for="productName">ชื่อสินค้า:</label>
+          <select id="productName" required>
+            <option value="">เลือกสินค้า</option>
+            <!-- รายชื่อสินค้าและราคา จะถูกเพิ่มที่นี่ -->
+          </select>
+        </div>
 
-      <label for="price">ราคา:</label>
-      <input type="number" id="price" required disabled>
+        <div style="width: 48%;">
+          <label for="price">ราคา:</label>
+          <input type="number" id="price" required disabled>
+        </div>
+      </div>
 
-      <label for="shippingCost">ค่าหิ้ว:</label>
-      <input type="number" id="shippingCost" required>
+      <div class="form-group">
+        <div style="width: 48%;">
+          <label for="shippingCost">ค่าหิ้ว:</label>
+          <input type="number" id="shippingCost" required>
+        </div>
 
-      <label for="shippingFee">ค่าส่ง:</label>
-      <input type="number" id="shippingFee" required>
+        <div style="width: 48%;">
+          <label for="shippingFee">ค่าส่ง:</label>
+          <input type="number" id="shippingFee" required>
+        </div>
+      </div>
 
-      <label for="totalPrice">รวมราคา:</label>
-      <input type="number" id="totalPrice" required disabled>
+      <div class="form-group">
+        <div style="width: 48%;">
+          <label for="totalPrice">รวมราคา:</label>
+          <input type="number" id="totalPrice" required disabled>
+        </div>
 
-      <label for="address">ที่อยู่จัดส่ง:</label>
-      <textarea id="address" required></textarea>
+        <div style="width: 48%;">
+          <label for="address">ที่อยู่จัดส่ง:</label>
+          <textarea id="address" required></textarea>
+        </div>
+      </div>
 
-      <label for="phone">เบอร์โทร:</label>
-      <input type="tel" id="phone" required>
+      <div class="form-group">
+        <div style="width: 48%;">
+          <label for="phone">เบอร์โทร:</label>
+          <input type="tel" id="phone" required>
+        </div>
 
-      <label for="slipImage">แนบสลิป (ไฟล์):</label>
-      <div class="file-upload">
-        <input type="file" id="slipImage1" accept="image/*" required>
-        <input type="file" id="slipImage2" accept="image/*" required>
+        <div style="width: 48%;">
+          <label for="slipImage">แนบสลิป (ไฟล์):</label>
+          <div class="file-upload">
+            <input type="file" id="slipImage1" accept="image/*" required>
+            <input type="file" id="slipImage2" accept="image/*" required>
+          </div>
+        </div>
       </div>
 
       <button type="submit">บันทึกข้อมูล</button>
