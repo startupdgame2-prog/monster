@@ -1,40 +1,136 @@
-<form id="orderForm">
-  <!-- ชื่อลูกค้า -->
-  <label for="customerName">ชื่อลูกค้า:</label>
-  <input type="text" id="customerName" name="customerName" required>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>บันทึกข้อมูลลูกค้า</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input, select, textarea { width: 100%; padding: 10px; margin: 10px 0; }
+    button { padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+    button:hover { background-color: #45a049; }
+  </style>
+</head>
+<body>
 
-  <!-- ชื่อศิลปิน -->
-  <label for="artist">เลือกชื่อศิลปิน:</label>
-  <select id="artist" name="artist">
-    <!-- รายชื่อศิลปิน -->
-  </select>
+  <h2>บันทึกข้อมูลลูกค้า</h2>
 
-  <!-- รายการสินค้า -->
-  <label for="product">เลือกรายการสินค้า:</label>
-  <select id="product" name="product">
-    <!-- รายการสินค้าจะอัปเดตตามศิลปินที่เลือก -->
-  </select>
+  <form id="orderForm">
+    <label for="customerName">ชื่อลูกค้า:</label>
+    <input type="text" id="customerName" required>
 
-  <!-- ราคา -->
-  <label for="price">ราคา:</label>
-  <input type="text" id="price" name="price" readonly>
+    <label for="artistName">ชื่อศิลปิน:</label>
+    <select id="artistName" required>
+      <option value="">เลือกศิลปิน</option>
+      <!-- รายชื่อศิลปินจะถูกเพิ่มที่นี่ -->
+    </select>
 
-  <!-- ราคาหิ้ว -->
-  <label for="shipping">ราคาหิ้ว:</label>
-  <input type="text" id="shipping" name="shipping">
+    <label for="productName">ชื่อสินค้า:</label>
+    <select id="productName" required>
+      <option value="">เลือกสินค้า</option>
+      <!-- รายชื่อสินค้าและราคา จะถูกเพิ่มที่นี่ -->
+    </select>
 
-  <!-- รวมราคา -->
-  <label for="total">รวมราคา:</label>
-  <input type="text" id="total" name="total" readonly>
+    <label for="price">ราคา:</label>
+    <input type="number" id="price" required disabled>
 
-  <!-- ที่อยู่จัดส่ง -->
-  <label for="address">ที่อยู่จัดส่ง:</label>
-  <input type="text" id="address" name="address">
+    <label for="shippingCost">ค่าหิ้ว:</label>
+    <input type="number" id="shippingCost" required>
 
-  <!-- แนบสลิป -->
-  <label for="slip">แนบสลิป:</label>
-  <input type="file" id="slip" name="slip">
+    <label for="shippingFee">ค่าส่ง:</label>
+    <input type="number" id="shippingFee" required>
 
-  <!-- ปุ่มบันทึก -->
-  <button type="submit">บันทึกข้อมูล</button>
-</form>
+    <label for="totalPrice">รวมราคา:</label>
+    <input type="number" id="totalPrice" required disabled>
+
+    <label for="address">ที่อยู่จัดส่ง:</label>
+    <textarea id="address" required></textarea>
+
+    <label for="phone">เบอร์โทร:</label>
+    <input type="tel" id="phone" required>
+
+    <label for="slipImage">แนบสลิป (URL):</label>
+    <input type="url" id="slipImage" required>
+
+    <button type="submit">บันทึกข้อมูล</button>
+  </form>
+
+  <script>
+    // ดึงข้อมูลศิลปินและสินค้า
+    fetch('https://script.google.com/macros/s/AKfycbwePduCmb8dLX43JW3Ra2yle4ZXxOd9xr9EGyr7mBnAKssQmfMfBem2BAfctlwW8ToU/exec') // เปลี่ยนเป็น ID ของ Web App
+      .then(response => response.json())
+      .then(data => {
+        // แสดงชื่อศิลปินใน Dropdown
+        const artistSelect = document.getElementById('artistName');
+        data.artists.forEach(artist => {
+          const option = document.createElement('option');
+          option.value = artist;
+          option.textContent = artist;
+          artistSelect.appendChild(option);
+        });
+
+        // แสดงชื่อสินค้าใน Dropdown
+        const productSelect = document.getElementById('productName');
+        data.products.forEach(product => {
+          const option = document.createElement('option');
+          option.value = product.name;
+          option.textContent = `${product.name} - ${product.price} บาท`;
+          productSelect.appendChild(option);
+        });
+
+        // คำนวณราคา
+        productSelect.addEventListener('change', function() {
+          const selectedProduct = data.products.find(product => product.name === this.value);
+          if (selectedProduct) {
+            document.getElementById('price').value = selectedProduct.price;
+            calculateTotal();
+          }
+        });
+
+        // คำนวณรวมราคา
+        document.getElementById('shippingCost').addEventListener('input', calculateTotal);
+        document.getElementById('shippingFee').addEventListener('input', calculateTotal);
+
+        function calculateTotal() {
+          const price = parseFloat(document.getElementById('price').value) || 0;
+          const shippingCost = parseFloat(document.getElementById('shippingCost').value) || 0;
+          const shippingFee = parseFloat(document.getElementById('shippingFee').value) || 0;
+
+          const total = price + shippingCost + shippingFee;
+          document.getElementById('totalPrice').value = total;
+        }
+      });
+
+    // ส่งข้อมูลไปยัง Google Sheets
+    document.getElementById('orderForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const formData = {
+        customerName: document.getElementById('customerName').value,
+        artistName: document.getElementById('artistName').value,
+        productName: document.getElementById('productName').value,
+        price: document.getElementById('price').value,
+        shippingCost: document.getElementById('shippingCost').value,
+        shippingFee: document.getElementById('shippingFee').value,
+        totalPrice: document.getElementById('totalPrice').value,
+        address: document.getElementById('address').value,
+        phone: document.getElementById('phone').value,
+        slipImage: document.getElementById('slipImage').value,
+      };
+
+      // ส่งข้อมูลไปยัง Google Apps Script
+      fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => response.json())
+      .then(data => alert('ข้อมูลถูกบันทึกเรียบร้อยแล้ว!'))
+      .catch(error => alert('เกิดข้อผิดพลาด'));
+    });
+  </script>
+
+</body>
+</html>
