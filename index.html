@@ -255,7 +255,12 @@
         method: 'POST',
         body: formData,
       })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to upload files: ' + response.statusText);
+        }
+        return response.json();
+      })
       .then(data => {
         if (data.result === "success") {
           alert("ข้อมูลถูกบันทึกเรียบร้อยแล้ว!");
