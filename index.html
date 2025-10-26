@@ -1,233 +1,104 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Monster By SWB</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #B3E5FC; /* สีฟ้าพาสเทล */
-      margin: 0;
-      padding: 0;
-    }
-
-    h2 {
-      text-align: center;
-      color: #333;
-      margin-top: 30px;
-    }
-
-    .form-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      max-width: 900px;
-      margin: 20px auto;
-      padding: 20px;
-      background-color: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .form-group {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-    }
-
-    .form-group label {
-      font-weight: bold;
-      margin-top: 10px;
-    }
-
-    .form-group input, .form-group select, .form-group textarea {
-      width: 48%; /* กำหนดความกว้างให้ช่องกรอกข้อมูลอยู่ใน 2 คอลัมน์ */
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 4px;
-      border: 1px solid #ddd;
-    }
-
-    .form-group textarea {
-      resize: vertical;
-      height: 100px;
-    }
-
-    button {
-      padding: 10px 20px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      cursor: pointer;
-      width: 100%;
-      font-size: 16px;
-      margin-top: 20px;
-    }
-
-    button:hover {
-      background-color: #45a049;
-    }
-  </style>
+  <title>ฟอร์มบันทึกข้อมูลการซื้อสินค้า</title>
 </head>
 <body>
+  <h1>ฟอร์มบันทึกข้อมูลการซื้อสินค้า</h1>
+  <form id="orderForm">
+    <label for="customerName">ชื่อลูกค้า:</label>
+    <input type="text" id="customerName" name="customerName" required><br><br>
 
-  <h2>Submit Order</h2>
-  <div class="form-container">
-    <form id="orderForm">
-      <div class="form-group">
-        <div style="width: 48%;">
-          <label for="customerName">ชื่อลูกค้า:</label>
-          <input type="text" id="customerName" required>
-        </div>
+    <label for="artistName">ชื่อศิลปิน:</label>
+    <select id="artistName" name="artistName" onchange="updateProducts()">
+      <!-- รายชื่อศิลปินจาก Google Sheets -->
+    </select><br><br>
 
-        <div style="width: 48%;">
-          <label for="artistName">ชื่อศิลปิน:</label>
-          <select id="artistName" required>
-            <option value="">เลือกศิลปิน</option>
-            <!-- รายชื่อศิลปินจะถูกเพิ่มที่นี่ -->
-          </select>
-        </div>
-      </div>
+    <label for="productName">สินค้า:</label>
+    <select id="productName" name="productName">
+      <!-- สินค้าของศิลปินที่เลือก -->
+    </select><br><br>
 
-      <div class="form-group">
-        <div style="width: 48%;">
-          <label for="productName">ชื่อสินค้า:</label>
-          <select id="productName" required>
-            <option value="">เลือกสินค้า</option>
-            <!-- รายชื่อสินค้าและราคา จะถูกเพิ่มที่นี่ -->
-          </select>
-        </div>
+    <label for="price">ราคา:</label>
+    <input type="number" id="price" name="price" readonly><br><br>
 
-        <div style="width: 48%;">
-          <label for="price">ราคา:</label>
-          <input type="number" id="price" required disabled>
-        </div>
-      </div>
+    <label for="totalPrice">รวมราคา:</label>
+    <input type="number" id="totalPrice" name="totalPrice" readonly><br><br>
 
-      <div class="form-group">
-        <div style="width: 48%;">
-          <label for="shippingCost">ค่าหิ้ว:</label>
-          <input type="number" id="shippingCost" required>
-        </div>
+    <label for="address">ที่อยู่:</label>
+    <textarea id="address" name="address" required></textarea><br><br>
 
-        <div style="width: 48%;">
-          <label for="shippingFee">ค่าส่ง:</label>
-          <input type="number" id="shippingFee" required>
-        </div>
-      </div>
+    <label for="phone">เบอร์โทร:</label>
+    <input type="text" id="phone" name="phone" required><br><br>
 
-      <div class="form-group">
-        <div style="width: 48%;">
-          <label for="totalPrice">รวมราคา:</label>
-          <input type="number" id="totalPrice" required disabled>
-        </div>
+    <label for="file">อัพโหลดไฟล์:</label>
+    <input type="file" id="file" name="file"><br><br>
 
-        <div style="width: 48%;">
-          <label for="address">ที่อยู่จัดส่ง:</label>
-          <textarea id="address" required></textarea>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div style="width: 48%;">
-          <label for="phone">เบอร์โทร:</label>
-          <input type="tel" id="phone" required>
-        </div>
-      </div>
-
-      <button type="submit">บันทึกข้อมูล</button>
-    </form>
-  </div>
+    <button type="submit">บันทึกข้อมูล</button>
+  </form>
 
   <script>
-    // ดึงข้อมูลศิลปินและสินค้า
-    fetch('https://script.google.com/macros/s/AKfycbwzeFneBGN6ZWKsjXt6rW6xCRp3_4kgjWLn-QWd8cJ5oNJKQ72RPT9fqQfidjkTt12l/exec') // เปลี่ยนเป็น ID ของ Web App
-      .then(response => response.json())
-      .then(data => {
-        const artistSelect = document.getElementById('artistName');
-        const productSelect = document.getElementById('productName');
-        
-        // แสดงชื่อศิลปินใน Dropdown
-        data.artists.forEach(artist => {
-          const option = document.createElement('option');
-          option.value = artist;
-          option.textContent = artist;
-          artistSelect.appendChild(option);
-        });
+    // การคำนวณราคาทั้งหมด
+    document.getElementById("price").addEventListener("input", calculateTotalPrice);
 
-        // เมื่อเลือกศิลปินแล้ว ให้กรองสินค้าที่แสดง
-        artistSelect.addEventListener('change', function() {
-          const selectedArtist = this.value;
-          updateProductList(selectedArtist);
-        });
+    function calculateTotalPrice() {
+      const price = parseFloat(document.getElementById("price").value) || 0;
+      const total = price;
+      document.getElementById("totalPrice").value = total;
+    }
 
-        function updateProductList(selectedArtist) {
-          // เคลียร์รายการสินค้าเก่า
-          productSelect.innerHTML = '<option value="">เลือกสินค้า</option>';
+    // ฟังก์ชันอัพเดตสินค้าเมื่อเลือกศิลปิน
+    function updateProducts() {
+      const artistName = document.getElementById("artistName").value;
+      const productSelect = document.getElementById("productName");
 
-          // แสดงสินค้าเฉพาะของศิลปินที่เลือก
-          const filteredProducts = data.productsByArtist[selectedArtist] || [];
-          filteredProducts.forEach(product => {
-            const option = document.createElement('option');
+      fetch('https://script.google.com/macros/s/AKfycbzjlfnCaGYTbE9m8GNszYC8Zjr74LEBkPpAVGcpVF6TYr-r5INlsccrAI67hNAlW4DW/exec?artist=' + artistName)
+        .then(response => response.json())
+        .then(data => {
+          productSelect.innerHTML = '';
+          data.products.forEach(product => {
+            const option = document.createElement("option");
             option.value = product.name;
-            option.textContent = `${product.name} - ${product.price} บาท`;
+            option.textContent = product.name;
             productSelect.appendChild(option);
           });
+        });
+    }
 
-          // คำนวณราคาสินค้าเมื่อเลือกสินค้า
-          productSelect.addEventListener('change', function() {
-            const selectedProduct = filteredProducts.find(product => product.name === this.value);
-            if (selectedProduct) {
-              document.getElementById('price').value = selectedProduct.price;
-              calculateTotal();
-            }
-          });
-        }
+    // เชื่อมต่อกับ Google Apps Script ผ่าน API
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzjlfnCaGYTbE9m8GNszYC8Zjr74LEBkPpAVGcpVF6TYr-r5INlsccrAI67hNAlW4DW/exec';
+    const form = document.getElementById('orderForm');
 
-        // คำนวณรวมราคา
-        document.getElementById('shippingCost').addEventListener('input', calculateTotal);
-        document.getElementById('shippingFee').addEventListener('input', calculateTotal);
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
 
-        function calculateTotal() {
-          const price = parseFloat(document.getElementById('price').value) || 0;
-          const shippingCost = parseFloat(document.getElementById('shippingCost').value) || 0;
-          const shippingFee = parseFloat(document.getElementById('shippingFee').value) || 0;
-
-          const total = price + shippingCost + shippingFee;
-          document.getElementById('totalPrice').value = total;
-        }
-      });
-
-    // ส่งข้อมูลไปยัง Google Sheets โดยไม่มีการอัพโหลดไฟล์
-    document.getElementById('orderForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-
-      const formData = {
-        customerName: document.getElementById('customerName').value,
-        artistName: document.getElementById('artistName').value,
-        productName: document.getElementById('productName').value,
-        price: document.getElementById('price').value,
-        shippingCost: document.getElementById('shippingCost').value,
-        shippingFee: document.getElementById('shippingFee').value,
-        totalPrice: document.getElementById('totalPrice').value,
-        address: document.getElementById('address').value,
-        phone: document.getElementById('phone').value,
-      };
+      const formData = new FormData(form);
 
       // ส่งข้อมูลไปยัง Google Apps Script
-      fetch('https://script.google.com/macros/s/AKfycbwzeFneBGN6ZWKsjXt6rW6xCRp3_4kgjWLn-QWd8cJ5oNJKQ72RPT9fqQfidjkTt12l/exec', {
+      fetch(scriptURL, {
         method: 'POST',
-        body: JSON.stringify(formData),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+        body: formData
       })
-      .then(response => response.json())
-      .then(data => alert('ข้อมูลถูกบันทึกเรียบร้อยแล้ว!'))
-      .catch(error => alert('เกิดข้อผิดพลาด: ' + error));
+      .then(response => alert("บันทึกข้อมูลสำเร็จ"))
+      .catch(error => alert("เกิดข้อผิดพลาด"));
     });
-  </script>
 
+    // โหลดศิลปินและสินค้าจาก Google Sheets เมื่อหน้าเว็บโหลด
+    window.onload = function() {
+      fetch('https://script.google.com/macros/s/AKfycbzjlfnCaGYTbE9m8GNszYC8Zjr74LEBkPpAVGcpVF6TYr-r5INlsccrAI67hNAlW4DW/exec')
+        .then(response => response.json())
+        .then(data => {
+          const artistSelect = document.getElementById("artistName");
+          data.artists.forEach(artist => {
+            const option = document.createElement("option");
+            option.value = artist;
+            option.textContent = artist;
+            artistSelect.appendChild(option);
+          });
+        });
+    };
+  </script>
 </body>
 </html>
