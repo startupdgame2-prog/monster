@@ -14,7 +14,6 @@
     button:hover { background-color: #45a049; }
     select { background-color: #fff; }
     textarea { resize: vertical; height: 100px; }
-    .file-upload { margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -68,7 +67,7 @@
 
   <script>
     // ดึงข้อมูลศิลปินและสินค้า
-    fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec') // เปลี่ยนเป็น ID ของ Web App
+    fetch('https://script.google.com/macros/s/AKfycbwePduCmb8dLX43JW3Ra2yle4ZXxOd9xr9EGyr7mBnAKssQmfMfBem2BAfctlwW8ToU/exec') // เปลี่ยนเป็น ID ของ Web App
       .then(response => response.json())
       .then(data => {
         const artistSelect = document.getElementById('artistName');
