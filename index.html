@@ -85,13 +85,21 @@
     .file-upload input {
       width: 48%;
     }
+
+    .loading {
+      text-align: center;
+      font-size: 18px;
+      color: #333;
+      display: none;
+    }
+
   </style>
 </head>
 <body>
 
   <!-- โลโก้ด้านบน -->
   <div style="text-align: center;">
-    <img src="/mnt/data/544833352_122174190182498520_8411966181056346662_n.jpg" alt="Logo" />
+    <img src="https://img2.pic.in.th/pic/544833352_122174190182498520_8411966181056346662_n-removebg-preview.png" alt="Logo" />
     <h2>Sharkwowboy</h2>
   </div>
 
@@ -168,13 +176,20 @@
 
       <button type="submit">บันทึกข้อมูล</button>
     </form>
+    <div class="loading">กำลังโหลดข้อมูลสินค้า...</div>
   </div>
 
   <script>
+    // แสดงข้อความ "กำลังโหลดข้อมูล" เมื่อข้อมูลกำลังโหลด
+    document.querySelector('.loading').style.display = 'block';
+
     // ดึงข้อมูลศิลปินและสินค้า
     fetch('https://script.google.com/macros/s/AKfycbwePduCmb8dLX43JW3Ra2yle4ZXxOd9xr9EGyr7mBnAKssQmfMfBem2BAfctlwW8ToU/exec') // เปลี่ยนเป็น ID ของ Web App
       .then(response => response.json())
       .then(data => {
+        // ซ่อนข้อความ "กำลังโหลดข้อมูล" เมื่อโหลดเสร็จ
+        document.querySelector('.loading').style.display = 'none';
+
         const artistSelect = document.getElementById('artistName');
         const productSelect = document.getElementById('productName');
         
