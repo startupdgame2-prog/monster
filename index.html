@@ -5,63 +5,72 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>บันทึกข้อมูลลูกค้า</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    input, select, textarea { width: 100%; padding: 10px; margin: 10px 0; }
-    button { padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+    body { font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9; }
+    h2 { text-align: center; color: #333; }
+    .form-container { max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input, select, textarea { width: 100%; padding: 10px; margin: 8px 0; border-radius: 4px; border: 1px solid #ddd; }
+    button { padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; width: 100%; font-size: 16px; }
     button:hover { background-color: #45a049; }
+    select { background-color: #fff; }
+    textarea { resize: vertical; height: 100px; }
   </style>
 </head>
 <body>
 
   <h2>บันทึกข้อมูลลูกค้า</h2>
 
-  <form id="orderForm">
-    <label for="customerName">ชื่อลูกค้า:</label>
-    <input type="text" id="customerName" required>
+  <div class="form-container">
+    <form id="orderForm">
+      <label for="customerName">ชื่อลูกค้า:</label>
+      <input type="text" id="customerName" required>
 
-    <label for="artistName">ชื่อศิลปิน:</label>
-    <select id="artistName" required>
-      <option value="">เลือกศิลปิน</option>
-      <!-- รายชื่อศิลปินจะถูกเพิ่มที่นี่ -->
-    </select>
+      <label for="artistName">ชื่อศิลปิน:</label>
+      <select id="artistName" required>
+        <option value="">เลือกศิลปิน</option>
+        <!-- รายชื่อศิลปินจะถูกเพิ่มที่นี่ -->
+      </select>
 
-    <label for="productName">ชื่อสินค้า:</label>
-    <select id="productName" required>
-      <option value="">เลือกสินค้า</option>
-      <!-- รายชื่อสินค้าและราคา จะถูกเพิ่มที่นี่ -->
-    </select>
+      <label for="productName">ชื่อสินค้า:</label>
+      <select id="productName" required>
+        <option value="">เลือกสินค้า</option>
+        <!-- รายชื่อสินค้าและราคา จะถูกเพิ่มที่นี่ -->
+      </select>
 
-    <label for="price">ราคา:</label>
-    <input type="number" id="price" required disabled>
+      <label for="price">ราคา:</label>
+      <input type="number" id="price" required disabled>
 
-    <label for="shippingCost">ค่าหิ้ว:</label>
-    <input type="number" id="shippingCost" required>
+      <label for="shippingCost">ค่าหิ้ว:</label>
+      <input type="number" id="shippingCost" required>
 
-    <label for="shippingFee">ค่าส่ง:</label>
-    <input type="number" id="shippingFee" required>
+      <label for="shippingFee">ค่าส่ง:</label>
+      <input type="number" id="shippingFee" required>
 
-    <label for="totalPrice">รวมราคา:</label>
-    <input type="number" id="totalPrice" required disabled>
+      <label for="totalPrice">รวมราคา:</label>
+      <input type="number" id="totalPrice" required disabled>
 
-    <label for="address">ที่อยู่จัดส่ง:</label>
-    <textarea id="address" required></textarea>
+      <label for="address">ที่อยู่จัดส่ง:</label>
+      <textarea id="address" required></textarea>
 
-    <label for="phone">เบอร์โทร:</label>
-    <input type="tel" id="phone" required>
+      <label for="phone">เบอร์โทร:</label>
+      <input type="tel" id="phone" required>
 
-    <label for="slipImage">แนบสลิป (URL):</label>
-    <input type="url" id="slipImage" required>
+      <label for="slipImage">แนบสลิป (URL):</label>
+      <input type="url" id="slipImage" required>
 
-    <button type="submit">บันทึกข้อมูล</button>
-  </form>
+      <button type="submit">บันทึกข้อมูล</button>
+    </form>
+  </div>
 
   <script>
     // ดึงข้อมูลศิลปินและสินค้า
-    fetch('https://script.google.com/macros/s/AKfycbwePduCmb8dLX43JW3Ra2yle4ZXxOd9xr9EGyr7mBnAKssQmfMfBem2BAfctlwW8ToU/exec') // เปลี่ยนเป็น ID ของ Web App
+    fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec') // เปลี่ยนเป็น ID ของ Web App
       .then(response => response.json())
       .then(data => {
-        // แสดงชื่อศิลปินใน Dropdown
         const artistSelect = document.getElementById('artistName');
+        const productSelect = document.getElementById('productName');
+        
+        // แสดงชื่อศิลปินใน Dropdown
         data.artists.forEach(artist => {
           const option = document.createElement('option');
           option.value = artist;
@@ -69,23 +78,34 @@
           artistSelect.appendChild(option);
         });
 
-        // แสดงชื่อสินค้าใน Dropdown
-        const productSelect = document.getElementById('productName');
-        data.products.forEach(product => {
-          const option = document.createElement('option');
-          option.value = product.name;
-          option.textContent = `${product.name} - ${product.price} บาท`;
-          productSelect.appendChild(option);
+        // เมื่อเลือกศิลปินแล้ว ให้กรองสินค้าที่แสดง
+        artistSelect.addEventListener('change', function() {
+          const selectedArtist = this.value;
+          updateProductList(selectedArtist);
         });
 
-        // คำนวณราคา
-        productSelect.addEventListener('change', function() {
-          const selectedProduct = data.products.find(product => product.name === this.value);
-          if (selectedProduct) {
-            document.getElementById('price').value = selectedProduct.price;
-            calculateTotal();
-          }
-        });
+        function updateProductList(selectedArtist) {
+          // เคลียร์รายการสินค้าเก่า
+          productSelect.innerHTML = '<option value="">เลือกสินค้า</option>';
+
+          // แสดงสินค้าเฉพาะของศิลปินที่เลือก
+          const filteredProducts = data.productsByArtist[selectedArtist] || [];
+          filteredProducts.forEach(product => {
+            const option = document.createElement('option');
+            option.value = product.name;
+            option.textContent = `${product.name} - ${product.price} บาท`;
+            productSelect.appendChild(option);
+          });
+
+          // คำนวณราคาสินค้าเมื่อเลือกสินค้า
+          productSelect.addEventListener('change', function() {
+            const selectedProduct = filteredProducts.find(product => product.name === this.value);
+            if (selectedProduct) {
+              document.getElementById('price').value = selectedProduct.price;
+              calculateTotal();
+            }
+          });
+        }
 
         // คำนวณรวมราคา
         document.getElementById('shippingCost').addEventListener('input', calculateTotal);
@@ -119,7 +139,7 @@
       };
 
       // ส่งข้อมูลไปยัง Google Apps Script
-      fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
+      fetch('https://script.google.com/macros/s/AKfycbwePduCmb8dLX43JW3Ra2yle4ZXxOd9xr9EGyr7mBnAKssQmfMfBem2BAfctlwW8ToU/exec', {
         method: 'POST',
         body: JSON.stringify(formData),
         headers: {
