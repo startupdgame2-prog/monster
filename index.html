@@ -165,6 +165,7 @@
           <input type="tel" id="phone" required>
         </div>
 
+        <!-- ช่องสำหรับอัพโหลดไฟล์ -->
         <div style="width: 48%;">
           <label for="slipImage">แนบสลิป (ไฟล์):</label>
           <div class="file-upload">
@@ -245,25 +246,24 @@
       });
 
     // ฟังก์ชันอัพโหลดไฟล์สลิป
-    function uploadFiles(fileInput) {
-      return new Promise((resolve, reject) => {
-        const file = fileInput.files[0];
-        if (!file) {
-          reject('No file selected');
-          return;
+    function uploadFiles(fileInput1, fileInput2) {
+      const formData = new FormData();
+      formData.append("slipImage1", fileInput1.files[0]);
+      formData.append("slipImage2", fileInput2.files[0]);
+
+      return fetch('https://script.google.com/macros/s/AKfycbwePduCmb8dLX43JW3Ra2yle4ZXxOd9xr9EGyr7mBnAKssQmfMfBem2BAfctlwW8ToU/exec', {
+        method: 'POST',
+        body: formData,
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.result === "success") {
+          alert("ข้อมูลถูกบันทึกเรียบร้อยแล้ว!");
+        } else {
+          throw new Error("อัพโหลดไฟล์ไม่สำเร็จ");
         }
-
-        const formData = new FormData();
-        formData.append('file', file);
-
-        fetch('https://your-file-upload-url.com', {
-          method: 'POST',
-          body: formData,
-        })
-        .then(response => response.json())
-        .then(data => resolve(data.url))  // URL ของไฟล์ที่อัพโหลด
-        .catch(reject);
-      });
+      })
+      .catch(error => alert('เกิดข้อผิดพลาด: ' + error));
     }
 
     // ส่งข้อมูลไปยัง Google Sheets
@@ -273,37 +273,7 @@
       const slipImage1 = document.getElementById('slipImage1');
       const slipImage2 = document.getElementById('slipImage2');
 
-      Promise.all([
-        uploadFiles(slipImage1),
-        uploadFiles(slipImage2),
-      ])
-      .then(([slipUrl1, slipUrl2]) => {
-        const formData = {
-          customerName: document.getElementById('customerName').value,
-          artistName: document.getElementById('artistName').value,
-          productName: document.getElementById('productName').value,
-          price: document.getElementById('price').value,
-          shippingCost: document.getElementById('shippingCost').value,
-          shippingFee: document.getElementById('shippingFee').value,
-          totalPrice: document.getElementById('totalPrice').value,
-          address: document.getElementById('address').value,
-          phone: document.getElementById('phone').value,
-          slipImage: slipUrl1 + ", " + slipUrl2,  // บันทึก URL ทั้ง 2 อัน
-        };
-
-        // ส่งข้อมูลไปยัง Google Apps Script
-        fetch('https://script.google.com/macros/s/AKfycbwePduCmb8dLX43JW3Ra2yle4ZXxOd9xr9EGyr7mBnAKssQmfMfBem2BAfctlwW8ToU/exec', {
-          method: 'POST',
-          body: JSON.stringify(formData),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-        .then(response => response.json())
-        .then(data => alert('ข้อมูลถูกบันทึกเรียบร้อยแล้ว!'))
-        .catch(error => alert('เกิดข้อผิดพลาด'));
-      })
-      .catch(error => alert('อัพโหลดไฟล์ไม่สำเร็จ: ' + error));
+      uploadFiles(slipImage1, slipImage2);
     });
   </script>
 
