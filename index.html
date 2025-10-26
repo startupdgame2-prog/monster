@@ -54,7 +54,7 @@
       const artistName = document.getElementById("artistName").value;
       const productSelect = document.getElementById("productName");
 
-      fetch('https://script.google.com/macros/s/AKfycbzjlfnCaGYTbE9m8GNszYC8Zjr74LEBkPpAVGcpVF6TYr-r5INlsccrAI67hNAlW4DW/exec?artist=' + artistName)
+      fetch('https://script.google.com/macros/s/AKfycbzjlfnCaGYTbE9m8GNszYC8Zjr74LEBkPpAVGcpVF6TYr-r5INlsccrAI67hNAlW4DW/exec' + artistName)
         .then(response => response.json())
         .then(data => {
           productSelect.innerHTML = '';
@@ -67,7 +67,7 @@
         });
     }
 
-    // เชื่อมต่อกับ Google Apps Script ผ่าน API
+    // การส่งข้อมูลไปยัง Google Apps Script
     const scriptURL = 'https://script.google.com/macros/s/AKfycbzjlfnCaGYTbE9m8GNszYC8Zjr74LEBkPpAVGcpVF6TYr-r5INlsccrAI67hNAlW4DW/exec';
     const form = document.getElementById('orderForm');
 
