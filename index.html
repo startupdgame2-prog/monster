@@ -142,7 +142,7 @@
 
   <script>
     // ดึงข้อมูลศิลปินและสินค้า
-    fetch('https://script.google.com/macros/s/AKfycbwePduCmb8dLX43JW3Ra2yle4ZXxOd9xr9EGyr7mBnAKssQmfMfBem2BAfctlwW8ToU/exec') // เปลี่ยนเป็น ID ของ Web App
+    fetch('https://script.google.com/macros/s/AKfycbwzeFneBGN6ZWKsjXt6rW6xCRp3_4kgjWLn-QWd8cJ5oNJKQ72RPT9fqQfidjkTt12l/exec') // เปลี่ยนเป็น ID ของ Web App
       .then(response => response.json())
       .then(data => {
         const artistSelect = document.getElementById('artistName');
@@ -216,7 +216,7 @@
       };
 
       // ส่งข้อมูลไปยัง Google Apps Script
-      fetch('https://script.google.com/macros/s/AKfycbwePduCmb8dLX43JW3Ra2yle4ZXxOd9xr9EGyr7mBnAKssQmfMfBem2BAfctlwW8ToU/exec', {
+      fetch('https://script.google.com/macros/s/AKfycbwzeFneBGN6ZWKsjXt6rW6xCRp3_4kgjWLn-QWd8cJ5oNJKQ72RPT9fqQfidjkTt12l/exec', {
         method: 'POST',
         body: JSON.stringify(formData),
         headers: {
