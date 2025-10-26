@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Upload Files to Dropbox</title>
+  <title>Monster By SWB</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -28,12 +28,6 @@
       background-color: #ffffff;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .form-container img {
-      width: 150px; /* ขนาดโลโก้ */
-      height: auto;
-      margin-bottom: 20px;
     }
 
     .form-group {
@@ -74,35 +68,11 @@
     button:hover {
       background-color: #45a049;
     }
-
-    .file-upload {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      margin-top: 10px;
-    }
-
-    .file-upload input {
-      width: 48%;
-    }
-
-    .loading {
-      text-align: center;
-      font-size: 18px;
-      color: #333;
-      display: none;
-    }
-
   </style>
 </head>
 <body>
 
-  <!-- โลโก้ด้านบน -->
-  <div style="text-align: center;">
-    <img src="https://img2.pic.in.th/pic/544833352_122174190182498520_8411966181056346662_n-removebg-preview.png" alt="Logo" />
-    <h2>Sharkwowboy</h2>
-  </div>
-
+  <h2>Submit Order</h2>
   <div class="form-container">
     <form id="orderForm">
       <div class="form-group">
@@ -164,33 +134,17 @@
           <label for="phone">เบอร์โทร:</label>
           <input type="tel" id="phone" required>
         </div>
-
-        <!-- ช่องสำหรับอัพโหลดไฟล์ -->
-        <div style="width: 48%;">
-          <label for="slipImage">แนบสลิป (ไฟล์):</label>
-          <div class="file-upload">
-            <input type="file" id="slipImage1" accept="image/*" required>
-            <input type="file" id="slipImage2" accept="image/*" required>
-          </div>
-        </div>
       </div>
 
       <button type="submit">บันทึกข้อมูล</button>
     </form>
-    <div class="loading">กำลังโหลดข้อมูลสินค้า...</div>
   </div>
 
   <script>
-    // แสดงข้อความ "กำลังโหลดข้อมูล" เมื่อข้อมูลกำลังโหลด
-    document.querySelector('.loading').style.display = 'block';
-
     // ดึงข้อมูลศิลปินและสินค้า
     fetch('https://script.google.com/macros/s/AKfycbwePduCmb8dLX43JW3Ra2yle4ZXxOd9xr9EGyr7mBnAKssQmfMfBem2BAfctlwW8ToU/exec') // เปลี่ยนเป็น ID ของ Web App
       .then(response => response.json())
       .then(data => {
-        // ซ่อนข้อความ "กำลังโหลดข้อมูล" เมื่อโหลดเสร็จ
-        document.querySelector('.loading').style.display = 'none';
-
         const artistSelect = document.getElementById('artistName');
         const productSelect = document.getElementById('productName');
         
@@ -245,40 +199,33 @@
         }
       });
 
-    // ฟังก์ชันอัพโหลดไฟล์สลิป
-    function uploadFiles(fileInput1, fileInput2) {
-      const formData = new FormData();
-      formData.append("slipImage1", fileInput1.files[0]);
-      formData.append("slipImage2", fileInput2.files[0]);
-
-      return fetch('https://script.google.com/macros/s/AKfycbwePduCmb8dLX43JW3Ra2yle4ZXxOd9xr9EGyr7mBnAKssQmfMfBem2BAfctlwW8ToU/exec', {
-        method: 'POST',
-        body: formData,
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to upload files: ' + response.statusText);
-        }
-        return response.json();
-      })
-      .then(data => {
-        if (data.result === "success") {
-          alert("ข้อมูลถูกบันทึกเรียบร้อยแล้ว!");
-        } else {
-          throw new Error("อัพโหลดไฟล์ไม่สำเร็จ");
-        }
-      })
-      .catch(error => alert('เกิดข้อผิดพลาด: ' + error));
-    }
-
-    // ส่งข้อมูลไปยัง Google Sheets
+    // ส่งข้อมูลไปยัง Google Sheets โดยไม่มีการอัพโหลดไฟล์
     document.getElementById('orderForm').addEventListener('submit', function(event) {
       event.preventDefault();
 
-      const slipImage1 = document.getElementById('slipImage1');
-      const slipImage2 = document.getElementById('slipImage2');
+      const formData = {
+        customerName: document.getElementById('customerName').value,
+        artistName: document.getElementById('artistName').value,
+        productName: document.getElementById('productName').value,
+        price: document.getElementById('price').value,
+        shippingCost: document.getElementById('shippingCost').value,
+        shippingFee: document.getElementById('shippingFee').value,
+        totalPrice: document.getElementById('totalPrice').value,
+        address: document.getElementById('address').value,
+        phone: document.getElementById('phone').value,
+      };
 
-      uploadFiles(slipImage1, slipImage2);
+      // ส่งข้อมูลไปยัง Google Apps Script
+      fetch('https://script.google.com/macros/s/AKfycbwePduCmb8dLX43JW3Ra2yle4ZXxOd9xr9EGyr7mBnAKssQmfMfBem2BAfctlwW8ToU/exec', {
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => alert('ข้อมูลถูกบันทึกเรียบร้อยแล้ว!'))
+      .catch(error => alert('เกิดข้อผิดพลาด: ' + error));
     });
   </script>
 
